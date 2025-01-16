@@ -1,7 +1,21 @@
 <template>
   <div v-if="soalMeta">
-    <div class="relative w-screen min-h-[100dvh]">
+    <div class="relative w-full min-h-[100dvh]">
       <div class="sticky z-10 top-0 left-0 w-full bg-gray-100">
+        <div class="container flex justify-start items-center py-2 px-3 bg-gray-500 text-white" v-if="ads">
+          <div class="flex justify-between items-center w-full">
+            <p class="text-sm">
+              Unduh Bupin Scanner di
+              <a
+                class="underline underline-offset-1"
+                href="https://play.google.com/store/apps/details?id=com.mmj.qr_scan&hl=id"
+              >
+                sini
+              </a>
+            </p>
+            <button @click="ads = false">x</button>
+          </div>
+        </div>
         <div class="container flex justify-start items-center py-2 px-3">
           <div class="flex flex-col gap-2">
             <h1 class="font-space_grotesk">{{ soalMeta?.namaBab }}</h1>
@@ -48,6 +62,7 @@
 <script lang="ts" setup>
 const router = useRoute()
 
+const ads = ref(true)
 const id = ref(router.params.id)
 const soalMeta: Ref<Meta | undefined> = ref()
 const soalData: Ref<SoalResponse | undefined> = ref()
