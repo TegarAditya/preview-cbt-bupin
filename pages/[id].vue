@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="w-full h-full overflow-y-auto px-5 py-5">
-        <div class="pointer-events-none flex select-none flex-col gap-4" v-if="soalData">
+        <div class="pointer-events-none flex select-none flex-col gap-4" v-if="soalData?.success">
           <div class="flex gap-2 text-sm" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
             <div class="soal flex flex-col gap-2">
@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="isError" class="border border-gray-300 rounded-md p-4">
+        <div v-else-if="!soalData?.success" class="border border-gray-300 rounded-md p-4">
           <p class="font-space_grotesk text-red-500">Soal tidak dapat ditemukan</p>
         </div>
       </div>
@@ -47,8 +47,6 @@
 
 <script lang="ts" setup>
 const router = useRoute()
-
-const isError: Ref<boolean> = ref(false)
 
 const id = ref(router.params.id)
 const soalMeta: Ref<Meta | undefined> = ref()
@@ -68,7 +66,7 @@ onMounted(async () => {
     soalMeta.value = await fetchSoalMeta(id.value as string)
     soalData.value = await fetchSoalData(soalId.value as string, level.value)
   } catch (error: any) {
-    isError.value = true
+    console.error(error)
   }
 })
 </script>
