@@ -2,7 +2,10 @@
   <div v-if="soalMeta">
     <div class="relative w-full min-h-[100dvh]">
       <div class="sticky z-10 top-0 left-0 w-full bg-gray-100">
-        <div class="container flex justify-start items-center py-2 px-3 bg-gray-500 text-white" v-if="ads">
+        <div
+          class="container flex justify-start items-center py-2 px-3 bg-gray-500 text-white"
+          v-if="ads"
+        >
           <div class="flex justify-between items-center w-full">
             <p class="text-sm">
               Unduh Bupin Scanner di
@@ -28,7 +31,7 @@
       </div>
       <div class="w-full h-full overflow-y-auto px-5 py-5">
         <div class="pointer-events-none flex select-none flex-col gap-4" v-if="soalData?.success">
-          <div class="flex gap-2 text-sm" v-for="item in soalData?.data.soal">
+          <div class="soal flex gap-2 text-sm" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
             <div class="soal flex flex-col gap-2">
               <div class="text-justify" v-html="item.soal"></div>
@@ -86,4 +89,9 @@ onMounted(async () => {
 })
 </script>
 
-<style></style>
+<style>
+.soal ol li {
+  list-style-type: decimal;
+  margin-left: 1rem;
+}
+</style>
