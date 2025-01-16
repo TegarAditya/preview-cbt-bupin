@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="!soalData?.success" class="border border-gray-300 rounded-md p-4">
+        <div v-else-if="soalData?.success === false" class="border border-gray-300 rounded-md p-4">
           <p class="font-space_grotesk text-red-500">Soal tidak dapat ditemukan</p>
         </div>
       </div>
