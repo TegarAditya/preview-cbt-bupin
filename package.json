@@ -19,6 +19,8 @@
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@iconify-json/material-symbols": "^1.2.12"
+    "@iconify-json/material-symbols": "^1.2.12",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.10"
   }
 }
