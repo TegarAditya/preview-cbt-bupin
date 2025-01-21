@@ -1,12 +1,12 @@
 <template>
   <div v-if="soalMeta">
-    <div class="relative w-full min-h-[100dvh]">
-      <div class="sticky z-10 top-0 left-0 w-full bg-gray-100">
+    <div class="relative min-h-[100dvh] w-full">
+      <div class="sticky left-0 top-0 z-10 w-full bg-gray-100">
         <div
-          class="container flex justify-start items-center py-2 px-3 bg-gray-500 text-white"
+          class="container flex items-center justify-start bg-gray-500 px-3 py-2 text-white"
           v-if="ads"
         >
-          <div class="flex justify-between items-center w-full">
+          <div class="flex w-full items-center justify-between">
             <p class="text-sm">
               Unduh Bupin Scanner di
               <a
@@ -19,7 +19,7 @@
             <button @click="ads = false">x</button>
           </div>
         </div>
-        <div class="container flex justify-start items-center py-2 px-3">
+        <div class="container flex items-center justify-start px-3 py-2">
           <div class="flex flex-col gap-2">
             <h1 class="font-space_grotesk">{{ soalMeta?.namaBab }}</h1>
             <div>
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="w-full h-full overflow-y-auto px-5 py-5">
+      <div class="h-full w-full overflow-y-auto px-5 py-5">
         <div class="pointer-events-none flex select-none flex-col gap-4" v-if="soalData?.success">
           <div class="soal flex gap-2 text-sm" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
@@ -54,7 +54,7 @@
             </div>
           </div>
         </div>
-        <div v-else-if="soalData?.success === false" class="border border-gray-300 rounded-md p-4">
+        <div v-else-if="soalData?.success === false" class="rounded-md border border-gray-300 p-4">
           <p class="font-space_grotesk text-red-500">Soal tidak dapat ditemukan</p>
         </div>
       </div>

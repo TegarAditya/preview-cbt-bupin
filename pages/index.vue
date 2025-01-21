@@ -1,20 +1,20 @@
 <template>
   <div
-    class="container w-screen min-h-[100dvh] flex flex-col justify-center items-center select-none"
+    class="container flex min-h-[100dvh] w-screen select-none flex-col items-center justify-center"
   >
-    <div class="flex flex-col gap-3 mx-5">
-      <h1 class="text-2xl font-semibold font-space_grotesk text-center">Selamat Datang!</h1>
+    <div class="mx-5 flex flex-col gap-3">
+      <h1 class="text-center font-space_grotesk text-2xl font-semibold">Selamat Datang!</h1>
       <input
         type="text"
         name="idujian"
         id="ujian-input"
-        class="w-full p-2 border border-gray-300 rounded-md min-w-72 md:min-w-96 md:h-12 active:outline-none focus:outline-none focus:ring-1 focus:ring-blue-500"
+        class="w-full min-w-72 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 active:outline-none md:h-12 md:min-w-96"
         placeholder="Masukkan ID Ujian"
         v-model="idUjian"
       />
     </div>
-    <div class="border border-gray-300 mt-4 rounded-md p-4 w-72 md:w-96">
-      <h3 class="font-semibold text-gray-600 font-space_grotesk">Status</h3>
+    <div class="mt-4 w-72 rounded-md border border-gray-300 p-4 md:w-96">
+      <h3 class="font-space_grotesk font-semibold text-gray-600">Status</h3>
 
       <!-- Loading state for Info -->
       <p v-if="isInfoLoading" class="text-sm text-gray-500">Memuat informasi ujian...</p>
@@ -28,8 +28,8 @@
         {{ isContentAvailable ? 'Konten ujian tersedia' : 'Konten ujian tidak tersedia' }}
       </p>
     </div>
-    <div class="border border-gray-300 mt-4 rounded-md p-4 w-72 md:w-96" v-if="soalMeta?.idUjian">
-      <h3 class="font-semibold text-gray-600 font-space_grotesk">Informasi Ujian</h3>
+    <div class="mt-4 w-72 rounded-md border border-gray-300 p-4 md:w-96" v-if="soalMeta?.idUjian">
+      <h3 class="font-space_grotesk font-semibold text-gray-600">Informasi Ujian</h3>
       <p v-if="soalMeta" class="text-sm text-gray-500">
         <span class="font-semibold">Nama Bab:</span> {{ soalMeta.namaBab }}
       </p>
@@ -50,11 +50,11 @@ const isContentAvailable = ref<boolean>(false)
 const isInfoLoading = ref<boolean>(false)
 const isContentLoading = ref<boolean>(false)
 
-const soalMeta: Ref<Meta | undefined> = ref()
-const soalData: Ref<SoalResponse | undefined> = ref()
-const soalId: ComputedRef<string | undefined> = computed(() => soalMeta.value?.idUjian)
+const soalMeta = ref<Meta | undefined>()
+const soalData = ref<SoalResponse | undefined>()
+const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
 
-const level: ComputedRef<Level> = computed(() => {
+const level = computed<Level>(() => {
   if (!soalMeta.value) return 'fallback'
 
   const kelas = soalMeta.value?.namaKelas
