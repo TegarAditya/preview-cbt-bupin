@@ -1,6 +1,6 @@
-# Nuxt Minimal Starter
+# Preview CBT Bupin
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This repository is used to store the source code of bupin's cbt preview website. Please do not violate the usage in any way possible.
 
 ## Setup
 
