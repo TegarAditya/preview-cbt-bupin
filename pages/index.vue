@@ -50,7 +50,7 @@
         </p>
       </div>
       <div v-if="idUjian" class="relative h-28 w-28">
-        <img :src="qrcode" alt="QR Code" class="h-28 w-28" />
+        <img :src="qrcode.value" alt="QR Code" class="h-28 w-28" />
         <div
           class="group absolute left-0 top-0 z-10 mx-auto flex h-full w-full items-center justify-center"
         >
@@ -79,7 +79,7 @@ const soalMeta = ref<Meta | undefined>()
 const soalData = ref<SoalResponse | undefined>()
 const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
 
-const qrcode = useQRCode(`https://buku.bupin.id/?${idUjian.value}`)
+const qrcode = computed(() => useQRCode(`https://buku.bupin.id/?${idUjian.value}`))
 
 const level = computed<Level>(() => {
   if (!soalMeta.value) return 'fallback'
