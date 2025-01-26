@@ -69,7 +69,7 @@
 <script lang="ts" setup>
 import { useQRCode } from '@vueuse/integrations/useQRCode'
 
-const idUjian = ref<string>('UJN-9311-757679.26827036224')
+const idUjian = ref<string>('')
 const isInfoAvailable = ref<boolean>(false)
 const isContentAvailable = ref<boolean>(false)
 const isInfoLoading = ref<boolean>(false)
