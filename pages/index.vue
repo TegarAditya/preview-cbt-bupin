@@ -50,7 +50,7 @@
         </p>
       </div>
       <div v-if="idUjian" class="relative h-28 w-28">
-        <img :src="qrcode.value" alt="QR Code" class="h-28 w-28" />
+        <img :src="qrcode.value" alt="QR Code" class="h-28 !w-28 aspect-square" />
         <div
           class="group absolute left-0 top-0 z-10 mx-auto flex h-full w-full items-center justify-center"
         >
@@ -104,7 +104,8 @@ const fetchData = async (id: string) => {
   isInfoLoading.value = false
 
   if (soalMeta.value?.idUjian) {
-    soalData.value = await fetchSoalData(soalId.value as string, level.value)
+    const data = await fetchSoalData(soalId.value as string, level.value)
+    soalData.value = data.success ? data : undefined
     isContentAvailable.value = !!soalData.value?.data
   } else {
     isContentAvailable.value = false
