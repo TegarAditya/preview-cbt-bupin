@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container flex min-h-[100dvh] w-screen select-none flex-col items-center justify-center"
+    class="container mx-auto flex min-h-[100dvh] max-w-xl select-none flex-col items-center justify-center"
   >
     <div class="mx-5 flex flex-col gap-3">
       <h1 class="text-center font-space_grotesk text-2xl font-semibold">Selamat Datang!</h1>
@@ -50,7 +50,7 @@
         </p>
       </div>
       <div v-if="idUjian" class="relative h-28 w-28">
-        <img :src="qrcode.value" alt="QR Code" class="h-28 !w-28 aspect-square" />
+        <img :src="qrcode.value" alt="QR Code" class="aspect-square h-28 !w-28" />
         <div
           class="group absolute left-0 top-0 z-10 mx-auto flex h-full w-full items-center justify-center"
         >
