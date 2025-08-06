@@ -21,17 +21,17 @@
         </div>
         <div class="container flex items-center justify-start px-3 py-2">
           <div class="flex flex-col gap-2">
-            <h1 class="font-space_grotesk">{{ soalMeta?.namaBab }}</h1>
+            <h1 class="font-space_grotesk text-lg">{{ soalMeta?.namaBab }}</h1>
             <div>
-              <p class="text-xs text-gray-500">{{ soalMeta?.namaMapel }}</p>
-              <p class="text-xs text-gray-500">{{ soalMeta?.namaKelas }}</p>
+              <p class="text-sm text-gray-500">{{ soalMeta?.namaMapel }}</p>
+              <p class="text-sm text-gray-500">{{ soalMeta?.namaKelas }}</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="h-full w-full overflow-y-auto px-5 py-5">
-        <div class="pointer-events-none flex select-none flex-col gap-4" v-if="soalData?.success">
-          <div class="soal flex gap-2 text-sm" v-for="item in soalData?.data.soal">
+      <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10">
+        <div class="pointer-events-none flex select-none flex-col gap-6 max-w-2xl mx-auto" v-if="soalData?.success">
+          <div class="soal flex gap-4" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
             <div class="soal flex flex-col gap-2">
               <div class="text-justify" v-html="item.soal"></div>
