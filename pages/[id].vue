@@ -3,7 +3,7 @@
     <div class="relative min-h-[100dvh] w-full">
       <div class="sticky left-0 top-0 z-10 w-full bg-gray-100">
         <div
-          class="container flex items-center justify-start bg-gray-500 px-3 py-2 text-white"
+          class="flex items-center justify-start bg-gray-500 px-3 py-2 text-white"
           v-if="ads"
         >
           <div class="flex w-full items-center justify-between">
