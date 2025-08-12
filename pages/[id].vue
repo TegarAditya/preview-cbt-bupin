@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10">
-        <div class="pointer-events-none flex select-none flex-col gap-6 max-w-2xl mx-auto" v-if="soalData?.success">
+        <div class="flex flex-col gap-6 max-w-2xl mx-auto" v-if="soalData?.success">
           <div class="soal flex gap-4" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
             <div class="soal flex flex-col gap-2">
@@ -64,6 +64,7 @@
 
 <script lang="ts" setup>
 const router = useRoute()
+const { $zoom } = useNuxtApp()
 
 const ads = ref(true)
 const id = ref(router.params.id)
@@ -83,9 +84,17 @@ onMounted(async () => {
   try {
     soalMeta.value = await fetchSoalMeta(id.value as string)
     soalData.value = await fetchSoalData(soalId.value as string, level.value)
+
+    $zoom('img', { background: '#000', margin: 20 })
   } catch (error: any) {
     console.error(error)
   }
+})
+
+watch(soalData, () => {
+  nextTick(() => {
+    $zoom('img', { background: '#000', margin: 20 })
+  })
 })
 </script>
 
