@@ -65,9 +65,9 @@ const { $zoom } = useNuxtApp()
 
 const ads = ref(true)
 const id = ref(router.params.id)
-const soalMeta: Ref<Meta | undefined> = ref()
-const soalData: Ref<SoalResponse | undefined> = ref()
-const soalId: ComputedRef<string | undefined> = computed(() => soalMeta.value?.idUjian)
+const soalMeta = useState<Meta | undefined>('soalMeta', () => undefined)
+const soalData = useState<SoalResponse | undefined>('soalData', () => undefined)
+const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
 
 const level: ComputedRef<Level> = computed(() => {
   if (!soalMeta.value) return 'fallback'
@@ -79,8 +79,10 @@ const level: ComputedRef<Level> = computed(() => {
 
 onMounted(async () => {
   try {
-    soalMeta.value = await fetchSoalMeta(id.value as string)
-    soalData.value = await fetchSoalData(soalId.value as string, level.value)
+    if (!soalMeta.value || !soalData.value) {
+      soalMeta.value = await fetchSoalMeta(id.value as string)
+      soalData.value = await fetchSoalData(soalId.value as string, level.value)
+    }
 
     $zoom('img', { background: '#000', margin: 20 })
   } catch (error: any) {

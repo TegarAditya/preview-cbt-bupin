@@ -75,8 +75,8 @@ const isContentAvailable = ref<boolean>(false)
 const isInfoLoading = ref<boolean>(false)
 const isContentLoading = ref<boolean>(false)
 
-const soalMeta = ref<Meta | undefined>()
-const soalData = ref<SoalResponse | undefined>()
+const soalMeta = useState<Meta | undefined>('soalMeta', () => undefined)
+const soalData = useState<SoalResponse | undefined>('soalData', () => undefined)
 const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
 
 const qrcode = computed(() => useQRCode(`https://buku.bupin.id/?${idUjian.value}`))
