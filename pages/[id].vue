@@ -1,11 +1,8 @@
 <template>
   <div v-if="soalMeta">
-    <div class="relative min-h-[100dvh] w-full">
-      <div class="sticky left-0 top-0 z-10 w-full bg-gray-100">
-        <div
-          class="flex items-center justify-start bg-gray-500 px-3 py-2 text-white"
-          v-if="ads"
-        >
+    <div class="relative min-h-dvh w-full">
+      <div class="sticky top-0 left-0 z-10 w-full bg-gray-100">
+        <div class="flex items-center justify-start bg-gray-500 px-3 py-2 text-white" v-if="ads">
           <div class="flex w-full items-center justify-between">
             <p class="text-sm">
               Unduh Bupin Scanner di
@@ -30,7 +27,7 @@
         </div>
       </div>
       <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10">
-        <div class="flex flex-col gap-6 max-w-2xl mx-auto" v-if="soalData?.success">
+        <div class="mx-auto flex max-w-2xl flex-col gap-6" v-if="soalData?.success">
           <div class="soal flex gap-4" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
             <div class="soal flex flex-col gap-2">

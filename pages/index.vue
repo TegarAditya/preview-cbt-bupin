@@ -1,6 +1,6 @@
 <template>
   <div
-    class="container mx-auto flex min-h-[100dvh] max-w-xl select-none flex-col items-center justify-center"
+    class="container mx-auto flex min-h-dvh max-w-xl select-none flex-col items-center justify-center"
   >
     <div class="mx-5 flex flex-col gap-3">
       <h1 class="text-center font-space_grotesk text-2xl font-semibold">Selamat Datang!</h1>
@@ -8,13 +8,13 @@
         type="text"
         name="idujian"
         id="ujian-input"
-        class="w-full min-w-72 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 active:outline-none md:h-12 md:w-[30rem] md:min-w-96"
+        class="w-full min-w-72 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 active:outline-none md:h-12 md:w-120 md:min-w-96"
         placeholder="Masukkan ID Ujian"
         v-model="idUjian"
       />
     </div>
     <div
-      class="mt-4 flex w-72 justify-between gap-2 rounded-md border border-gray-300 p-4 md:w-[30rem]"
+      class="mt-4 flex w-72 justify-between gap-2 rounded-md border border-gray-300 p-4 md:w-120"
     >
       <div>
         <h3 class="font-space_grotesk font-semibold text-gray-600">Status</h3>
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div
-      class="mt-4 flex w-72 flex-wrap justify-between rounded-md border border-gray-300 p-4 md:w-[30rem] md:flex-nowrap"
+      class="mt-4 flex w-72 flex-wrap justify-between rounded-md border border-gray-300 p-4 md:w-120 md:flex-nowrap"
       v-if="soalMeta?.idUjian && idUjian"
     >
       <div>
@@ -50,7 +50,7 @@
         </p>
       </div>
       <div v-if="idUjian" class="relative h-28 w-28">
-        <img :src="qrcode.value" alt="QR Code" class="aspect-square h-28 !w-28" />
+        <img :src="qrcode.value" alt="QR Code" class="aspect-square h-28 w-28!" />
         <div
           class="group absolute left-0 top-0 z-10 mx-auto flex h-full w-full items-center justify-center"
         >
