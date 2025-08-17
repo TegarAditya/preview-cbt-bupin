@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-      <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10">
+  <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10" ref="contentRoot">
         <div class="mx-auto flex max-w-2xl flex-col gap-6" v-if="soalData?.success">
           <div class="soal flex gap-4" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
@@ -68,6 +68,7 @@ const id = ref(router.params.id)
 const soalMeta = useState<Meta | undefined>('soalMeta', () => undefined)
 const soalData = useState<SoalResponse | undefined>('soalData', () => undefined)
 const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
+const contentRoot = ref<HTMLElement | null>(null)
 
 const level: ComputedRef<Level> = computed(() => {
   if (!soalMeta.value) return 'fallback'
@@ -77,6 +78,29 @@ const level: ComputedRef<Level> = computed(() => {
   return kelas.includes('SD') ? 'sd' : kelas.includes('SMP') ? 'smp' : 'sma'
 })
 
+function addImageSpinners(root: HTMLElement | null) {
+  if (!root) return
+  const imgs = root.querySelectorAll('img')
+  imgs.forEach(img => {
+    if (img.dataset.spinnerAdded) return
+    img.dataset.spinnerAdded = 'true'
+    const spinner = document.createElement('span')
+    spinner.className = 'img-spinner'
+    spinner.innerHTML = `<span class="spinner"></span>`
+    img.parentNode?.insertBefore(spinner, img)
+    function removeSpinner() {
+      spinner.remove()
+      img.removeEventListener('load', removeSpinner)
+      img.removeEventListener('error', removeSpinner)
+    }
+    img.addEventListener('load', removeSpinner)
+    img.addEventListener('error', removeSpinner)
+    if (img.complete && img.naturalWidth !== 0) {
+      removeSpinner()
+    }
+  })
+}
+
 onMounted(async () => {
   try {
     if (!soalMeta.value || !soalData.value) {
@@ -85,6 +109,7 @@ onMounted(async () => {
     }
 
     $zoom('img', { background: '#000', margin: 20 })
+    nextTick(() => addImageSpinners(contentRoot.value))
   } catch (error: any) {
     console.error(error)
   }
@@ -93,6 +118,7 @@ onMounted(async () => {
 watch(soalData, () => {
   nextTick(() => {
     $zoom('img', { background: '#000', margin: 20 })
+    addImageSpinners(contentRoot.value)
   })
 })
 </script>
@@ -101,5 +127,25 @@ watch(soalData, () => {
 .soal ol li {
   list-style-type: decimal;
   margin-left: 1rem;
+}
+.img-spinner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+}
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-top: 2px solid #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
