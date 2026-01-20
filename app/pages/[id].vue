@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-  <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10" ref="contentRoot">
+      <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10" ref="contentRoot">
         <div class="mx-auto flex max-w-2xl flex-col gap-6" v-if="soalData?.success">
           <div class="soal flex gap-4" v-for="item in soalData?.data.soal">
             <p>{{ item.nomor }}.</p>
@@ -60,14 +60,13 @@
 </template>
 
 <script lang="ts" setup>
-const router = useRoute()
+const route = useRoute()
 const { $zoom } = useNuxtApp()
 
 const ads = ref(true)
-const id = ref(router.params.id)
+const id = computed(() => String(route.params.id || ''))
 const soalMeta = useState<Meta | undefined>('soalMeta', () => undefined)
 const soalData = useState<SoalResponse | undefined>('soalData', () => undefined)
-const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
 const contentRoot = ref<HTMLElement | null>(null)
 
 const level: ComputedRef<Level> = computed(() => {
@@ -78,10 +77,12 @@ const level: ComputedRef<Level> = computed(() => {
   return kelas.includes('SD') ? 'sd' : kelas.includes('SMP') ? 'smp' : 'sma'
 })
 
+const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
+
 function addImageSpinners(root: HTMLElement | null) {
   if (!root) return
   const imgs = root.querySelectorAll('img')
-  imgs.forEach(img => {
+  imgs.forEach((img) => {
     if (img.dataset.spinnerAdded) return
     img.dataset.spinnerAdded = 'true'
     const spinner = document.createElement('span')
@@ -101,10 +102,28 @@ function addImageSpinners(root: HTMLElement | null) {
   })
 }
 
+if (!soalMeta.value && id.value) {
+  const { data } = await useAsyncData(`meta-${id.value}`, () => fetchSoalMeta(id.value), {
+    server: true,
+  })
+  soalMeta.value = data.value
+}
+
+if (!soalData.value && soalId.value) {
+  const { data } = await useAsyncData(
+    `soal-${soalId.value}-${level.value}`,
+    () => fetchSoalData(soalId.value as string, level.value),
+    { server: true },
+  )
+  soalData.value = data.value
+}
+
 onMounted(async () => {
   try {
-    if (!soalMeta.value || !soalData.value) {
+    if (!soalMeta.value && id.value) {
       soalMeta.value = await fetchSoalMeta(id.value as string)
+    }
+    if (!soalData.value && soalId.value) {
       soalData.value = await fetchSoalData(soalId.value as string, level.value)
     }
 
@@ -145,7 +164,11 @@ watch(soalData, () => {
   animation: spin 1s linear infinite;
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

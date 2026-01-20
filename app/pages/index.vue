@@ -50,7 +50,9 @@
         </p>
       </div>
       <div v-if="idUjian" class="relative h-28 w-28">
-        <img :src="qrcode.value" alt="QR Code" class="aspect-square h-28 w-28!" />
+        <ClientOnly>
+          <img :src="qrcode" alt="QR Code" class="aspect-square h-28 w-28!" />
+        </ClientOnly>
         <div
           class="group absolute left-0 top-0 z-10 mx-auto flex h-full w-full items-center justify-center"
         >
@@ -78,8 +80,7 @@ const isContentLoading = ref<boolean>(false)
 const soalMeta = useState<Meta | undefined>('soalMeta', () => undefined)
 const soalData = useState<SoalResponse | undefined>('soalData', () => undefined)
 const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
-
-const qrcode = computed(() => useQRCode(`https://buku.bupin.id/?${idUjian.value}`))
+const qrcode = ref<string>('')
 
 const level = computed<Level>(() => {
   if (!soalMeta.value) return 'fallback'
@@ -116,6 +117,14 @@ const fetchData = async (id: string) => {
 onMounted(() => fetchData(idUjian.value))
 
 watch(idUjian, (id) => fetchData(id))
+
+onMounted(() => {
+  const source = computed(() => `https://buku.bupin.id/?${idUjian.value}`)
+  const qr = useQRCode(source)
+  watchEffect(() => {
+    qrcode.value = qr.value || ''
+  })
+})
 </script>
 
 <style></style>
