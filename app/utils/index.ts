@@ -1,12 +1,12 @@
 import { ofetch } from 'ofetch'
 
-const { metaURL, soalURL } = useAppConfig()
-
 export async function fetchSoalMeta(id: string): Promise<Meta> {
+  const { metaURL } = useAppConfig()
   return ofetch(`${metaURL}/api/ujn.php?${id}`)
 }
 
 export async function fetchSoalData(id: string, level: Level): Promise<SoalResponse> {
+  const { soalURL } = useAppConfig()
   return ofetch(`${soalURL}/api/mapel/${id}?level=${level}`)
 }
 
