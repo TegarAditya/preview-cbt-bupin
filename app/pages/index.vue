@@ -1,14 +1,14 @@
 <template>
   <div
-    class="container mx-auto flex min-h-dvh max-w-xl select-none flex-col items-center justify-center"
+    class="container mx-auto flex min-h-dvh max-w-xl flex-col items-center justify-center select-none"
   >
     <div class="mx-5 flex flex-col gap-3">
-      <h1 class="text-center font-space_grotesk text-2xl font-semibold">Selamat Datang!</h1>
+      <h1 class="font-space_grotesk text-center text-2xl font-semibold">Selamat Datang!</h1>
       <input
         type="text"
         name="idujian"
         id="ujian-input"
-        class="w-full min-w-72 rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 active:outline-none md:h-12 md:w-120 md:min-w-96"
+        class="w-full min-w-72 rounded-md border border-gray-300 p-2 focus:ring-1 focus:ring-blue-500 focus:outline-none active:outline-none md:h-12 md:w-120 md:min-w-96"
         placeholder="Masukkan ID Ujian"
         v-model="idUjian"
       />
@@ -17,53 +17,61 @@
       class="mt-4 flex w-72 justify-between gap-2 rounded-md border border-gray-300 p-4 md:w-120"
     >
       <div>
-        <h3 class="font-space_grotesk font-semibold text-gray-600">Status</h3>
+        <h2 class="font-space_grotesk font-semibold text-gray-700">Status</h2>
         <!-- Loading state for Info -->
         <p v-if="isInfoLoading" class="text-sm text-gray-500">Memuat informasi ujian...</p>
-        <p v-else :class="`text-sm ${isInfoAvailable ? 'text-blue-500' : 'text-red-500'}`">
+        <p v-else :class="`text-sm ${isInfoAvailable ? 'text-blue-700' : 'text-red-700'}`">
           {{ isInfoAvailable ? 'Informasi ujian tersedia' : 'Informasi ujian tidak tersedia' }}
         </p>
         <!-- Loading state for Content -->
         <p v-if="isContentLoading" class="text-sm text-gray-500">Memuat konten ujian...</p>
-        <p v-else :class="`text-sm ${isContentAvailable ? 'text-blue-500' : 'text-red-500'}`">
+        <p v-else :class="`text-sm ${isContentAvailable ? 'text-blue-700' : 'text-red-700'}`">
           {{ isContentAvailable ? 'Konten ujian tersedia' : 'Konten ujian tidak tersedia' }}
         </p>
       </div>
     </div>
     <div
-      class="mt-4 flex w-72 flex-wrap justify-between rounded-md border border-gray-300 p-4 md:w-120 md:flex-nowrap"
+      class="mt-4 flex w-72 flex-wrap flex-col md:flex-row items-center rounded-md border border-gray-300 p-4 md:w-120 shrink-0 md:flex-nowrap md:justify-between"
       v-if="soalMeta?.idUjian && idUjian"
     >
-      <div>
-        <h3 class="font-space_grotesk font-semibold text-gray-600">Informasi Ujian</h3>
-        <p v-if="soalMeta" class="text-sm text-gray-500">
+      <div class="max-w-80">
+        <h3 class="font-space_grotesk font-semibold text-gray-700">Informasi Ujian</h3>
+        <p v-if="soalMeta" class="text-sm text-gray-700">
           <span class="font-semibold">Nama Bab:</span> {{ soalMeta.namaBab }}
         </p>
-        <p v-if="soalMeta" class="text-sm text-gray-500">
+        <p v-if="soalMeta" class="text-sm text-gray-700">
           <span class="font-semibold">Mata Pelajaran:</span> {{ soalMeta.namaMapel }}
         </p>
-        <p v-if="soalMeta" class="text-sm text-gray-500">
+        <p v-if="soalMeta" class="text-sm text-gray-700">
           <span class="font-semibold">Kelas:</span> {{ soalMeta.namaKelas }}
         </p>
-        <p v-if="soalData?.data.nama" class="text-sm text-gray-500">
+        <p v-if="soalData?.data.nama" class="text-sm text-gray-700">
           <span class="font-semibold">Soal:</span> {{ soalData.data.nama }}
         </p>
       </div>
-      <div v-if="idUjian" class="relative h-28 w-28">
+      <div v-if="idUjian" class="relative h-56 w-56 md:h-28 md:w-28!">
         <ClientOnly>
-          <img :src="qrcode" alt="QR Code" class="aspect-square h-28 w-28!" />
+          <img :src="qrcode" alt="QR Code" class="aspect-square h-56 w-56! md:h-28 md:w-28!" />
         </ClientOnly>
         <div
-          class="group absolute left-0 top-0 z-10 mx-auto flex h-full w-full items-center justify-center"
+          class="group absolute top-0 left-0 z-10 mx-auto flex h-full w-full items-center justify-center"
         >
           <button
-            class="hidden w-full bg-white px-2 text-center font-space_grotesk font-semibold text-black group-hover:block"
+            class="font-space_grotesk hidden w-full bg-white px-2 text-center font-semibold text-black md:group-hover:block"
             @click="navigateTo(`/${idUjian}`)"
+            v-if="isContentAvailable"
           >
-            Click me
+            Buka Soal
           </button>
         </div>
       </div>
+      <button
+        class="inline-flex md:hidden w-full items-center justify-center rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center align-middle font-sans text-sm font-medium text-slate-50 shadow-sm transition-all duration-300 ease-in select-none hover:border-slate-700 hover:bg-slate-700 hover:shadow-md focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none data-[shape=pill]:rounded-full data-[width=full]:w-full"
+        @click="navigateTo(`/${idUjian}`)"
+        v-if="isContentAvailable"
+      >
+        Buka Soal
+      </button>
     </div>
   </div>
 </template>
