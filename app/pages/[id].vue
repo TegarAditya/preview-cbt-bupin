@@ -20,8 +20,8 @@
           <div class="flex flex-col gap-2">
             <h1 class="font-space_grotesk text-lg">{{ soalMeta?.namaBab }}</h1>
             <div>
-              <p class="text-sm text-gray-500">{{ soalMeta?.namaMapel }}</p>
-              <p class="text-sm text-gray-500">{{ soalMeta?.namaKelas }}</p>
+              <p class="text-sm text-gray-700">{{ soalMeta?.namaMapel }}</p>
+              <p class="text-sm text-gray-700">{{ soalMeta?.namaKelas }}</p>
             </div>
           </div>
         </div>
@@ -51,10 +51,18 @@
             </div>
           </div>
         </div>
-        <div v-else-if="soalData?.success === false" class="rounded-md border border-gray-300 p-4">
+        <div
+          v-else-if="soalData?.success === false"
+          class="flex w-full items-center justify-center rounded-md border border-gray-300 p-4"
+        >
           <p class="font-space_grotesk text-red-500">Soal tidak dapat ditemukan</p>
         </div>
       </div>
+    </div>
+  </div>
+  <div class="p-5" v-else-if="soalMeta === undefined">
+    <div class="flex w-full items-center justify-center rounded-md border border-gray-300 p-4">
+      <p class="font-space_grotesk text-red-500">ID Soal tidak valid.</p>
     </div>
   </div>
 </template>
