@@ -15,6 +15,4 @@ useSeoMeta({
 })
 </script>
 
-<style>
-
-</style>
+<style></style>

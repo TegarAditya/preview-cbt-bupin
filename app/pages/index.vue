@@ -31,7 +31,7 @@
       </div>
     </div>
     <div
-      class="mt-4 flex w-72 flex-wrap flex-col md:flex-row items-center rounded-md border border-gray-300 p-4 md:w-120 shrink-0 md:flex-nowrap md:justify-between"
+      class="mt-4 flex w-72 shrink-0 flex-col flex-wrap items-center rounded-md border border-gray-300 p-4 md:w-120 md:flex-row md:flex-nowrap md:justify-between"
       v-if="soalMeta?.idUjian && idUjian"
     >
       <div class="max-w-80">
@@ -66,7 +66,7 @@
         </div>
       </div>
       <button
-        class="inline-flex md:hidden w-full items-center justify-center rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center align-middle font-sans text-sm font-medium text-slate-50 shadow-sm transition-all duration-300 ease-in select-none hover:border-slate-700 hover:bg-slate-700 hover:shadow-md focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none data-[shape=pill]:rounded-full data-[width=full]:w-full"
+        class="inline-flex w-full items-center justify-center rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center align-middle font-sans text-sm font-medium text-slate-50 shadow-sm transition-all duration-300 ease-in select-none hover:border-slate-700 hover:bg-slate-700 hover:shadow-md focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none data-[shape=pill]:rounded-full data-[width=full]:w-full md:hidden"
         @click="navigateTo(`/${idUjian}`)"
         v-if="isContentAvailable"
       >
@@ -124,7 +124,7 @@ const fetchData = async (id: string) => {
 
 onMounted(() => fetchData(idUjian.value))
 
-watch(idUjian, (id) => fetchData(id))
+watch(idUjian, (id: string) => fetchData(id))
 
 onMounted(() => {
   const source = computed(() => `https://buku.bupin.id/?${idUjian.value}`)
