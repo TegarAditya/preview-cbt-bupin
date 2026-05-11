@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'id' },
-    }
+    },
   },
   appConfig: {
     metaURL: process.env.META_BASE_URL || 'https://buku.bupin.id',
@@ -17,6 +17,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   vite: {
     plugins: [tailwindcss(), devtoolsJson()],
+    optimizeDeps: {
+      include: ['@vueuse/integrations/useQRCode', 'medium-zoom'],
+    },
   },
   modules: ['@vueuse/nuxt', '@nuxt/icon'],
 })
