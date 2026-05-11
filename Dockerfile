@@ -3,9 +3,13 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml* ./
+RUN corepack enable
 
-RUN npm install -g pnpm && pnpm install
+RUN corepack prepare pnpm@11 --activate
+
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
