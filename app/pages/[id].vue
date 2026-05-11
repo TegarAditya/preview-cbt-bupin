@@ -28,7 +28,7 @@
       </div>
       <div class="h-full w-full overflow-y-auto px-5 py-5 pb-10" ref="contentRoot">
         <div class="mx-auto flex max-w-2xl flex-col gap-6" v-if="soalData?.success">
-          <div class="soal flex gap-4" v-for="item in soalData?.data.soal">
+          <div class="soal flex gap-4" v-for="item in soalData?.data.soal" :key="item.nomor">
             <p>{{ item.nomor }}.</p>
             <div class="soal flex flex-col gap-2">
               <div class="text-justify" v-html="item.soal"></div>
@@ -41,14 +41,71 @@
                     item.pilD,
                     item.pilE,
                   ]"
+                  :key="`${item.nomor}-${index}`"
                 >
-                  <div class="opsi flex gap-2" v-if="optionString.length > 0">
+                  <div
+                    v-if="optionString.length > 0"
+                    class="opsi flex gap-2 rounded-md px-2 py-1 transition-colors"
+                    :class="
+                      submitted
+                        ? item.jawaban === charToJawaban(indexToChar(index))
+                          ? 'bg-green-50 text-green-800'
+                          : selectedAnswers[item.nomor] === charToJawaban(indexToChar(index))
+                            ? 'bg-red-50 text-red-700'
+                            : 'text-gray-700'
+                        : selectedAnswers[item.nomor] === charToJawaban(indexToChar(index))
+                          ? 'bg-gray-200 text-gray-900'
+                          : 'cursor-pointer hover:bg-gray-100'
+                    "
+                    @click="selectAnswer(item.nomor, indexToChar(index))"
+                  >
                     <span class="font-semibold">{{ indexToChar(index) }}.</span>
+                    <span
+                      v-if="submitted && item.jawaban === charToJawaban(indexToChar(index))"
+                      class="font-semibold text-green-700"
+                    >
+                      ✓
+                    </span>
+                    <span
+                      v-else-if="
+                        submitted &&
+                        selectedAnswers[item.nomor] === charToJawaban(indexToChar(index)) &&
+                        item.jawaban !== charToJawaban(indexToChar(index))
+                      "
+                      class="font-semibold text-red-600"
+                    >
+                      ✕
+                    </span>
                     <div v-html="optionString"></div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="flex flex-col gap-3 pt-2">
+            <button
+              class="inline-flex w-full items-center justify-center rounded-md border border-slate-800 bg-slate-800 px-4 py-2 text-center align-middle font-sans text-sm font-medium text-slate-50 shadow-sm transition-all duration-300 ease-in select-none hover:border-slate-700 hover:bg-slate-700 hover:shadow-md focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none data-[shape=pill]:rounded-full data-[width=full]:w-full"
+              :disabled="submitted || !soalData?.data.soal?.length || !allAnswered"
+              @click="submitJawaban"
+            >
+              Submit
+            </button>
+            <p v-if="!submitted && soalData?.data.soal?.length && !allAnswered" class="text-sm text-gray-500">
+              Lengkapi semua jawaban sebelum submit. ({{ answeredCount }}/{{ totalQuestions }})
+            </p>
+            <button
+              v-if="submitted"
+              class="inline-flex w-full items-center justify-center rounded-md border border-gray-500 bg-white px-4 py-2 text-center align-middle font-sans text-sm font-medium text-gray-700 shadow-sm transition-all duration-300 ease-in hover:border-gray-700 hover:bg-gray-100 focus:shadow-none data-[shape=pill]:rounded-full data-[width=full]:w-full"
+              @click="resetAttempt"
+            >
+              Coba Lagi
+            </button>
+            <p
+              v-if="submitted"
+              class="font-space_grotesk text-center text-lg font-semibold text-gray-700"
+            >
+              Nilai: {{ score }}/100
+            </p>
           </div>
         </div>
         <div
@@ -76,6 +133,12 @@ const id = computed(() => String(route.params.id || ''))
 const soalMeta = useState<Meta | undefined>('soalMeta', () => undefined)
 const soalData = useState<SoalResponse | undefined>('soalData', () => undefined)
 const contentRoot = ref<HTMLElement | null>(null)
+const selectedAnswers = ref<Record<number, Jawaban>>({})
+const submitted = ref(false)
+const score = ref(0)
+const totalQuestions = computed(() => soalData.value?.data.soal.length ?? 0)
+const answeredCount = computed(() => Object.keys(selectedAnswers.value).length)
+const allAnswered = computed(() => totalQuestions.value > 0 && answeredCount.value === totalQuestions.value)
 
 const level: ComputedRef<Level> = computed(() => {
   if (!soalMeta.value) return 'fallback'
@@ -86,6 +149,37 @@ const level: ComputedRef<Level> = computed(() => {
 })
 
 const soalId = computed<string | undefined>(() => soalMeta.value?.idUjian)
+
+function charToJawaban(char: string): Jawaban {
+  return `pil${char}` as Jawaban
+}
+
+function selectAnswer(questionNumber: number, optionChar: string) {
+  if (submitted.value) return
+
+  selectedAnswers.value = {
+    ...selectedAnswers.value,
+    [questionNumber]: charToJawaban(optionChar),
+  }
+}
+
+function submitJawaban() {
+  if (!soalData.value?.success || submitted.value || !allAnswered.value) return
+
+  const total = soalData.value.data.soal.length
+  const correct = soalData.value.data.soal.reduce((count, item) => {
+    return selectedAnswers.value[item.nomor] === item.jawaban ? count + 1 : count
+  }, 0)
+
+  score.value = total > 0 ? Math.round((correct / total) * 100) : 0
+  submitted.value = true
+}
+
+function resetAttempt() {
+  selectedAnswers.value = {}
+  submitted.value = false
+  score.value = 0
+}
 
 function addImageSpinners(root: HTMLElement | null) {
   if (!root) return
@@ -125,6 +219,28 @@ if (!soalData.value && soalId.value) {
   )
   soalData.value = data.value
 }
+
+watch([soalMeta, soalData], () => {
+  resetAttempt()
+})
+
+watch(id, async (newId) => {
+  resetAttempt()
+
+  if (!newId) {
+    soalMeta.value = undefined
+    soalData.value = undefined
+    return
+  }
+
+  soalMeta.value = await fetchSoalMeta(newId)
+
+  if (soalMeta.value?.idUjian) {
+    soalData.value = await fetchSoalData(soalMeta.value.idUjian, level.value)
+  } else {
+    soalData.value = undefined
+  }
+})
 
 onMounted(async () => {
   try {
